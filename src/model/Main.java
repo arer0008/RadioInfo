@@ -17,7 +17,9 @@ public class Main {
                 MainWindow m = new MainWindow();
                 m.show();
 
+
                         ChannelInfoGetter c = new ChannelInfoGetter();
+                c.print();
 
 
 
