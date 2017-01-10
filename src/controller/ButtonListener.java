@@ -1,6 +1,9 @@
 package controller;
 
+import javafx.scene.control.Tab;
 import model.Channel;
+import model.Program;
+import view.TablePanel;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -12,9 +15,9 @@ import java.util.ArrayList;
  */
 public class ButtonListener implements ActionListener {
 
-        private JTextArea textArea;
-        private JTextField textField;
+
         private ArrayList<Channel> channels = new ArrayList<>();
+        private ArrayList<Program> programs = new ArrayList<>();
 
         public ButtonListener(Channel channel) {
 
@@ -29,6 +32,8 @@ public class ButtonListener implements ActionListener {
 
                         if (e.getActionCommand().equals(channels.get(i).getName())) {
                                 System.out.println("Pressed channel " + channels.get(i).getName());
+                                programs = channels.get(i).getPrograms();
+                                TablePanel tablePanel = new TablePanel(programs);
                                 break;
                         }
                 }
