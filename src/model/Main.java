@@ -10,6 +10,8 @@ import java.util.ArrayList;
  */
 public class Main {
 
+        public MainWindow mainWindow;
+
         public static void main(String [ ] args) {
 
 
@@ -29,4 +31,5 @@ public class Main {
 
 
         }
+
 }

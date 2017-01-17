@@ -36,21 +36,23 @@ public class ProgramGetter {
                 createDocument();
 
                 NodeList sceduleNodeList;
-                sceduleNodeList = doc.getElementsByTagName("scheduledepisode");
-
                 NodeList paginationNodes;
+
+
+
+
 
                 paginationNodes = doc.getElementsByTagName("pagination");
                 NodeList paginationChildren = paginationNodes.item(0).getChildNodes();
                 for (int i = 0; i < paginationChildren.getLength(); i++) {
                         if (paginationChildren.item(i).getNodeName().equals("totalpages")) {
                                 pages = Integer.valueOf(paginationChildren.item(i).getTextContent());
-
                                 break;
 
                         }
 
                 }
+
 
                 int loops = 0;
                 while (loops < pages) {
@@ -65,6 +67,8 @@ public class ProgramGetter {
 
                                 }
                         }
+
+                        sceduleNodeList = doc.getElementsByTagName("scheduledepisode");
 
 
                         for (int i = 0; i < sceduleNodeList.getLength(); i++) {
@@ -97,12 +101,12 @@ public class ProgramGetter {
                                                         p.setID(nnm.getNamedItem("id").getTextContent());
                                                         //p.setName(nnm.getNamedItem("name").getTextContent());
                                                 }
-                                                if (st.equals("channel")) {
+                                                /*if (st.equals("channel")) {
                                                         NamedNodeMap nnm = childNodeList.item(j).getAttributes();
                                                         p.setChannelID(nnm.getNamedItem("id").getTextContent());
                                                         p.setChannelName(nnm.getNamedItem("name").getTextContent());
 
-                                                }
+                                                }*/
 
                                                 if (st.equals("imageurl")) {
 
@@ -139,15 +143,16 @@ public class ProgramGetter {
                                         }
 
                                 }
+
                                 programs.add(p);
 
 
                         }
                         loops++;
-
                         setUpConnection(nextpage);
                         createDocument();
                 }
+
         }
 
 

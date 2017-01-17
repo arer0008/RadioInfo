@@ -1,6 +1,10 @@
 package model;
 
 import javax.swing.*;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by c15aen on 2017-01-04.
@@ -14,11 +18,13 @@ public class Program {
         private String endTime;
         private String channelID;
         private String channelName;
-        private String name;
         private String imageString;
         private ImageIcon imageIcon;
+        private Date startDate;
+        private Date endDate;
 
         public Program() {
+
 
         }
 
@@ -42,13 +48,13 @@ public class Program {
 
         public void setStart(String startTime) {
 
-                this.startTime = startTime;
+                this.startTime = startTime.substring(11,19);
 
         }
 
         public void setEnd(String endTime) {
 
-                this.endTime = endTime;
+                this.endTime = endTime.substring(11,19);
 
         }
 
@@ -63,11 +69,6 @@ public class Program {
 
         }
 
-        public void setName(String name) {
-
-                this.name = name;
-
-        }
 
         public void setImageString(String image) {
 
@@ -77,6 +78,10 @@ public class Program {
         public void setImageIcon(ImageIcon image) {
 
                 this.imageIcon = image;
+        }
+
+        public boolean hasAired() {
+                return true;
         }
 
 
@@ -109,10 +114,6 @@ public class Program {
                 return channelName;
         }
 
-        public String getName() {
-                return name;
-        }
-
         public String getImageString() {
                 return imageString;
         }
@@ -121,7 +122,7 @@ public class Program {
         }
 
         public void print() {
-                System.out.println(name);
+                System.out.println(title);
                 System.out.println(startTime);
                 System.out.println(channelName);
                 //System.out.println(title);
