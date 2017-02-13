@@ -4,10 +4,8 @@ import model.Channel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.awt.image.BufferedImage;
+
 
 /**
  * Author: Andreas, Arvid
@@ -16,16 +14,6 @@ import java.util.HashMap;
  * Description: A panel object to create a TroopMaker JPanel for a frame.
  */
 public class InfoPanel {
-
-
-
-        //Sets the default image index to 0.
-        private final int DEFAULT_IMAGE_INDEX = 0;
-        private int currentImage = 0;
-
-        // Cache image icon load
-        private HashMap<String, ImageIcon> programIcons = new HashMap<>();
-        private ArrayList<ActionListener> actionListeners = new ArrayList<>();
 
         private JLabel label;
         private JPanel infoPanel;
@@ -55,15 +43,12 @@ public class InfoPanel {
         private void panelSetup() {
 
                 programInfoPanelSetup();
-                //buttonPanelSetup();
                 programIconPanelSetup();
 
-                infoPanel.setBorder(BorderFactory.createTitledBorder("Programinfo"));
                 infoPanel.setMinimumSize(new Dimension(40, 40));
                 infoPanel.setLayout(new BorderLayout());
 
                 infoPanel.add(programInfoPanel, BorderLayout.CENTER);
-                //troopMakerPanel.add(buttonPanel, BorderLayout.SOUTH);
                 infoPanel.add(programIconPanel, BorderLayout.NORTH);
         }
 
@@ -75,11 +60,15 @@ public class InfoPanel {
                 programDescription.setEditable(false);
                 programDescription.setBackground(Color.GRAY);
                 programDescription.setPreferredSize(new Dimension(220, 319));
-                programDescription.setBorder(BorderFactory.createTitledBorder("Programbeskrivning"));
+                programDescription.setBorder(BorderFactory.createTitledBorder("Information"));
                 programDescription.setFont(new Font("Serif", Font.BOLD, 16));
-                programDescription.setForeground(Color.CYAN);
-                setProgramInfo("Testbeskrivning!!!");
-                //changeUnitInfo("Speed: 20\nCost: 100\nHealth: 45");
+                programDescription.setForeground(Color.YELLOW);
+                setProgramInfo("Om du klickar på en kanal visas en pop-up " +
+                        "ruta med en tablå innehållande de program som " +
+                        "som kanalen sänder 12 timmar frammåt samt de som " +
+                        "redan sänts de 12 senaste timmarna. \nNär du klickar" +
+                        " på ett program i tablån visas information om" +
+                        " programmet i denna ruta");
         }
 
 
@@ -87,6 +76,7 @@ public class InfoPanel {
         private void programIconPanelSetup() {
                 programIconPanel = new JPanel();
                 programIconPanel.setBorder(BorderFactory.createTitledBorder("Programikon"));
+                programIconPanel.setPreferredSize(new Dimension(220,230));
                 programIconPanel.add(label, BorderLayout.CENTER);
         }
 
@@ -104,20 +94,19 @@ public class InfoPanel {
          * Sets the current viewing troop image to the image from the
          * image list at the given index.
          *
-         * @param path:int, index at the location of the wanted image.
+         * @param image:int, index at the location of the wanted image.
          */
-        public void setProgramImage(String path) {
-                if (programIcons.get(path) != null) {
-                        label.setIcon(programIcons.get(path));
-                } else {
-                        try {
-                                programIcons.put(path, loadImage(path));
-                                label.setIcon(programIcons.get(path));
-                        } catch (NullPointerException e) {
-                                programIcons.put(path, null);
-                                e.printStackTrace();
-                        }
+        public void setProgramImage(ImageIcon image) {
+
+                if(image == null) {
+                        label.setIcon(null);
+                        label.setText("Ingen tillgänglig bild för detta program");
                 }
+                else {
+                        label.setText(null);
+                        label.setIcon(image);
+                }
+
         }
 
         private ImageIcon loadImage(String path) {
@@ -127,13 +116,15 @@ public class InfoPanel {
 
         public void setProgramInfo(String description) {
 
-                programDescription.setText(description);
+                if(description.length() < 1) {
+                        programDescription.setText("Ingen tillgänglig information om detta program");
+                }
+                else {
+                        programDescription.setText(description);
+
+                }
         }
 
-        public int getIconListSize() {
-
-                return programIcons.size();
-        }
 
 
 }

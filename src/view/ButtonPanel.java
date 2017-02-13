@@ -18,13 +18,15 @@ public class ButtonPanel {
         private ArrayList<Channel> channels;
         private ArrayList<JButton> buttons = new ArrayList<>();
         private JPanel buttonPanel;
+        private InfoPanel infoPanel;
         private URL url;
         private URLConnection conn;
 
-        public ButtonPanel(ArrayList<Channel> channels) {
+        public ButtonPanel(ArrayList<Channel> channels, InfoPanel infoPanel) {
 
 
                 buttonPanel = new JPanel();
+                this.infoPanel = infoPanel;
                 this.channels = channels;
                 createButtons();
         }
@@ -34,15 +36,15 @@ public class ButtonPanel {
                 Dimension buttonDimension = new Dimension(175, 105);
 
                 for(int i = 0; i < channels.size() ; i++) {
-                        if(channels.get(i).getName() != null && channels.get(i).getImageIcon() != null) {
+
                                 JButton button = new JButton();
                                 button.setIcon(channels.get(i).getImageIcon());
                                 button.setPreferredSize(buttonDimension);
-                                button.addActionListener(new ButtonListener(channels.get(i)));
+                                button.addActionListener(new ButtonListener(channels.get(i), infoPanel));
                                 button.setActionCommand(channels.get(i).getName());
 
                                 addButton(button);
-                        }
+
 
                 }
 

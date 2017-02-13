@@ -1,5 +1,6 @@
 package view;
 
+import controller.MouseListener;
 import model.Program;
 
 import javax.swing.*;
@@ -17,19 +18,15 @@ public class TableFrame {
         private ArrayList<Program> programs;
         private JTable jTable = new JTable();
 
-        public TableFrame(ArrayList<Program> pList){
+        public TableFrame(ArrayList<Program> programs, InfoPanel infoPanel){
 
-                programs = pList;
+                this.programs = programs;
 
                 jTable = createTable();
-
+                jTable.addMouseListener(new MouseListener(programs, infoPanel));
                 programWindow.setSize(new Dimension(600,600));
                 programWindow.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-
-
                 JScrollPane jScrollPane = new JScrollPane(jTable);
-
-
                 programWindow.add(jScrollPane);
 
         /*
@@ -51,6 +48,7 @@ public class TableFrame {
         }
 
         public void setTitle(String s) {
+
                 programWindow.setTitle(s);
         }
 
@@ -58,17 +56,16 @@ public class TableFrame {
 
         public JTable createTable(){
 
-                Object[] columnNames = {"Program namn", "Start tid", "Slut tid"};
+                Object[] columnNames = {"Programnamn", "Starttid", "Sluttid"};
                 Object[][] data = new String[programs.size()][3];
 
 
                 for (int i = 0; i < programs.size(); i++){
 
                         Program p = programs.get(i);
-                        System.out.println(p.getTitle());
                         data[i][0] = p.getTitle();
-                        data[i][1] = p.getStartTime();
-                        data[i][2] = p.getEndTime();
+                        data[i][1] = p.getUnformattedStartTime();
+                        data[i][2] = p.getUnformattedEndTime();
 
 
 
@@ -90,7 +87,7 @@ public class TableFrame {
                                 Program p = programs.get(row);
                                 c.setName(p.getTitle());
 
-                                if (p.hasAired()) {
+                                if (p.gethasAired()) {
                                         c.setBackground(Color.LIGHT_GRAY);
                                 } else {
                                         c.setBackground(Color.white);
@@ -105,5 +102,6 @@ public class TableFrame {
                 return jTable;
 
         }
+
 
 }

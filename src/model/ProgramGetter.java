@@ -16,7 +16,11 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by c15aen on 2017-01-05.
@@ -29,17 +33,45 @@ public class ProgramGetter {
         private ArrayList<Program> programs = new ArrayList<>();
         private int pages;
         private String nextpage;
+        private static Date today = new Date();
+        private String tomorrowURL;
+        private String yesterdayURL;
+
 
         public ProgramGetter(String s) {
 
-                setUpConnection(s);
-                createDocument();
+
+
+                if(nowIsAfter12()) {
+                        setUpConnection(s);
+                        createDocument();
+                        getProgramInfo();
+                        tomorrowURL = getTomorrowURL(s);
+                        setUpConnection(tomorrowURL);
+                        createDocument();
+                        getProgramInfo();
+
+
+                }
+                else {
+                        yesterdayURL = getYesterdayURL(s);
+                        setUpConnection(yesterdayURL);
+                        createDocument();
+                        getProgramInfo();
+                        setUpConnection(s);
+                        createDocument();
+                        getProgramInfo();
+
+                }
+
+
+
+        }
+
+        public void getProgramInfo() {
 
                 NodeList sceduleNodeList;
                 NodeList paginationNodes;
-
-
-
 
 
                 paginationNodes = doc.getElementsByTagName("pagination");
@@ -111,11 +143,11 @@ public class ProgramGetter {
                                                 if (st.equals("imageurl")) {
 
                                                         p.setImageString(childNodeList.item(j).getTextContent());
-                                                        //String img = childNodeList.item(j).getTextContent();
+                                                        String img = childNodeList.item(j).getTextContent();
                                                         //System.out.println(img);
                                                         //img = img.trim();
-                                                        //URL hej = null;
-                                                        /*if(img.length() > 0) {
+                                                        URL hej = null;
+                                                        if(img.length() > 0) {
                                                                 try {
                                                                         hej = new URL(img);
                                                                 } catch (MalformedURLException e) {
@@ -126,7 +158,7 @@ public class ProgramGetter {
                                                                 try {
 
                                                                         BufferedImage bufImg = ImageIO.read(hej);
-                                                                        Image th = bufImg.getScaledInstance(170,100,Image.SCALE_SMOOTH);
+                                                                        Image th = bufImg.getScaledInstance(200,200, Image.SCALE_SMOOTH);
                                                                         ImageIcon icon = new ImageIcon(th);
                                                                         p.setImageIcon(icon);
 
@@ -135,7 +167,7 @@ public class ProgramGetter {
                                                                         e.printStackTrace();
                                                                 }
 
-                                                        }*/
+                                                        }
 
                                                 }
 
@@ -144,15 +176,22 @@ public class ProgramGetter {
 
                                 }
 
-                                programs.add(p);
+                                p.setHasAired();
+                                if(p.isWithinTimeframe()) {
+
+                                        programs.add(p);
+                                }
+
 
 
                         }
                         loops++;
-                        setUpConnection(nextpage);
-                        createDocument();
-                }
+                        if(nextpage != null) {
+                                setUpConnection(nextpage);
+                                createDocument();
+                        }
 
+                }
         }
 
 
@@ -190,6 +229,7 @@ public class ProgramGetter {
                         e.printStackTrace();
                 }
                 try {
+                        assert db != null;
                         doc = db.parse(conn.getInputStream());
                 } catch (SAXException e) {
                         e.printStackTrace();
@@ -197,6 +237,40 @@ public class ProgramGetter {
                         e.printStackTrace();
                 }
 
+
+        }
+
+        public Boolean nowIsAfter12() {
+
+                Date noon = null;
+
+                try {
+                        noon = new SimpleDateFormat("HH:mm:ss").parse("12:00:00");
+                } catch (ParseException e) {
+                        e.printStackTrace();
+                }
+
+                assert noon != null;
+                return today.after(noon);
+
+        }
+
+        public String getTomorrowURL(String s) {
+
+                DateFormat d = new SimpleDateFormat("yyyy-MM-dd");
+                Date tomorrow = new Date(today.getTime() + (1000 * 60 * 60 * 24));
+
+                return s + "&date=" + d.format(tomorrow);
+
+
+        }
+
+        public String getYesterdayURL(String s) {
+
+                DateFormat d = new SimpleDateFormat("yyyy-MM-dd");
+                Date yesterday = new Date(today.getTime() - (1000 * 60 * 60 * 24));
+
+                return s + "&date=" + d.format(yesterday);
 
         }
 

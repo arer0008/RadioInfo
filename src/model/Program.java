@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.Date;
 
 /**
@@ -20,8 +21,9 @@ public class Program {
         private String channelName;
         private String imageString;
         private ImageIcon imageIcon;
-        private Date startDate;
-        private Date endDate;
+        private boolean hasAired;
+        private static Date today = new Date();
+
 
         public Program() {
 
@@ -48,13 +50,14 @@ public class Program {
 
         public void setStart(String startTime) {
 
-                this.startTime = startTime.substring(11,19);
+                this.startTime = startTime;
+
 
         }
 
         public void setEnd(String endTime) {
 
-                this.endTime = endTime.substring(11,19);
+                this.endTime = endTime;
 
         }
 
@@ -80,9 +83,54 @@ public class Program {
                 this.imageIcon = image;
         }
 
-        public boolean hasAired() {
-                return true;
+        public boolean gethasAired() {
+
+                return hasAired;
         }
+
+        public void setHasAired() {
+
+                DateFormat d = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+                Date date = null;
+                Date nowDate = new Date();
+                try {
+                        date = d.parse(endTime);
+
+                } catch (ParseException e) {
+                        e.printStackTrace();
+                }
+
+                assert date != null;
+                if (date.before(nowDate)) {
+                        hasAired = true;
+                } else {
+                        hasAired= false;
+                }
+
+
+        }
+
+        public boolean isWithinTimeframe() {
+
+                DateFormat d = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+                Date show = null;
+
+                try {
+                        show = d.parse(endTime);
+                } catch (ParseException e) {
+                        e.printStackTrace();
+                }
+
+                Date twelveAhead = new Date(today.getTime() + (1000 * 60 * 60 * 12));
+                Date twelveBefore = new Date(today.getTime() - (1000 * 60 * 60 * 12));
+
+                assert show != null;
+                return show.after(twelveBefore) && show.before(twelveAhead);
+
+
+        }
+
+
 
 
 
@@ -98,12 +146,22 @@ public class Program {
                 return title;
         }
 
-        public String getStartTime() {
+        public String getUnformattedStartTime() {
                 return startTime;
         }
 
-        public String getEndTime() {
+        public String getUnformattedEndTime() {
                 return endTime;
+        }
+
+        public String getStartTime() {
+
+                return startTime.substring(11,19);
+        }
+
+        public String getEndTime() {
+
+                return endTime.substring(11,19);
         }
 
         public String getChannelID() {

@@ -23,7 +23,7 @@ public class Channel {
         }
 
         public void setPrograms() {
-                //System.out.println(sceduleurl);
+                System.out.println(sceduleurl);
 
                 if(sceduleurl != null) {
                         ProgramGetter pg = new ProgramGetter(sceduleurl);

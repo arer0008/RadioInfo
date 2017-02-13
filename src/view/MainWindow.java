@@ -15,13 +15,11 @@ public class MainWindow {
 
         private InfoPanel infoPanel;
         private ButtonPanel buttonPanel;
-        private TableFrame tableFrame;
         private JFrame mainWindow = new JFrame("RadioInfo");
         private Dimension d = new Dimension(400,200);
         private JPanel upperPanel = new JPanel();
         private JPanel rightPanel = new JPanel();
         private JPanel centerPanel = new JPanel();
-        private JTable popUpPanel = new JTable();
 
 
         public MainWindow(ArrayList<Channel> channels) {
@@ -30,21 +28,17 @@ public class MainWindow {
                 mainWindow.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
                 infoPanel = new InfoPanel();
-                buttonPanel = new ButtonPanel(channels);
-                tableFrame = new TableFrame(channels.get(1).getPrograms());
-
+                rightPanel = infoPanel.getJPanel();
+                buttonPanel = new ButtonPanel(channels, infoPanel);
 
                 mainWindow.setJMenuBar(new MenuPanel());
                 rightPanel = infoPanel.getJPanel();
                 centerPanel = buttonPanel.getJPanel();
-                popUpPanel = tableFrame.createTable();
                 rightPanel.setPreferredSize(d);
                 mainWindow.setSize(new Dimension(1400,1050));
                 mainWindow.add(upperPanel, BorderLayout.NORTH);
                 mainWindow.add(rightPanel, BorderLayout.EAST);
                 mainWindow.add(centerPanel, BorderLayout.CENTER);
-                //mainWindow.add(popUpPanel, BorderLayout.WEST);
-
 
 
         }

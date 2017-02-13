@@ -94,9 +94,8 @@ public class ChannelGetter {
 
                                                         c.setImageString(childNodeList.item(j).getTextContent());
                                                         String img = childNodeList.item(j).getTextContent();
-                                                        //System.out.println(img);
-                                                        //img = img.trim();
                                                         URL hej = null;
+
                                                         if(img.length() > 0) {
                                                                 try {
                                                                         hej = new URL(img);
@@ -130,7 +129,7 @@ public class ChannelGetter {
 
                                 }
 
-                                c.setPrograms();
+                                //c.setPrograms();
                                 if(c.getSceduleurl() != null) {
                                         channels.add(c);
                                 }
@@ -154,7 +153,7 @@ public class ChannelGetter {
         public void setUpConnection(String s) {
 
                 try {
-                        System.out.println(s);
+                        //System.out.println(s);
                         url = new URL(s);
                         conn = url.openConnection();
                         conn.connect();
